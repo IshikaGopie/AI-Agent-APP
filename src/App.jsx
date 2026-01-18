@@ -7,6 +7,9 @@ import Divider from "./components/atoms/Divider.jsx";
 import ChatListItem from "./components/molecules/ChatListItem.jsx";
 import AgentHeader from "./components/molecules/AgentHeader.jsx";
 import DropdownMenu from "./components/molecules/DropdownMenu.jsx";
+import EmptyStateHeader from "./components/molecules/EmptyStateHeader.jsx";
+import ExampleQuestionsCard from "./components/molecules/ExampleQuestionsCard.jsx";
+import AgentCard from "./components/molecules/AgentCard.jsx";
 
 function App() {
     return (
@@ -38,7 +41,19 @@ function App() {
                 onDownload={() => console.log("download pdf")}
                 onClear={() => console.log("clear chat")}
             />
+            <Divider />
+            <EmptyStateHeader />
+            <ExampleQuestionsCard />
+            <Divider />
 
+            <AgentCard
+                emoji="✈️"
+                iconBg="#3b82f6"
+                name="Travel Expert"
+                description="Your personal travel advisor for destinations, itineraries, and tips"
+                tags={["Destinations", "Itineraries", "Travel Tips", "Culture"]}
+                active
+            />
         </div>
     );
 }
