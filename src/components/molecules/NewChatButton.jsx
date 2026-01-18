@@ -1,4 +1,3 @@
-// molecules/NewChatButton.js
 import DefaultButton from "../atoms/DefaultButton.jsx";
 import AddIcon from "@mui/icons-material/Add";
 
