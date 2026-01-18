@@ -10,50 +10,15 @@ import DropdownMenu from "./components/molecules/DropdownMenu.jsx";
 import EmptyStateHeader from "./components/molecules/EmptyStateHeader.jsx";
 import ExampleQuestionsCard from "./components/molecules/ExampleQuestionsCard.jsx";
 import AgentCard from "./components/molecules/AgentCard.jsx";
+import SwitchAgentModal from "./components/organisms /SwitchAgentModal.jsx";
+import Sidebar from "./components/organisms /SideBar.jsx";
+import ChatAgentHeader from "./components/organisms /ChatAgentHeader.jsx";
+import ChatEmptyState from "./components/organisms /ChatEmptyState.jsx";
 
 function App() {
     return (
         <div>
-            <NewChatButton />
-            <Divider />
-            <SwitchAgentButton />
-            <Divider />
-            <ChatInput />
-            <Divider />
-            <SidebarSearchInput />
-            <Divider />
-            <ChatListItem
-                emoji="✈️"
-                agentName="Travel Expert"
-                title="New Travel Expert Chat"
-                timestamp="Just now"
-                onDelete={() => console.log("delete chat")}
-            />
-            <Divider />
-            <AgentHeader
-                agentName="Travel Expert"
-                description="Your personal travel advisor for destinations, itineraries, and tips"
-                onSwitchAgent={() => console.log("switch agent")}
-                onMenuClick={() => console.log("open menu")}
-            />
-            <Divider />
-            <DropdownMenu
-                onDownload={() => console.log("download pdf")}
-                onClear={() => console.log("clear chat")}
-            />
-            <Divider />
-            <EmptyStateHeader />
-            <ExampleQuestionsCard />
-            <Divider />
-
-            <AgentCard
-                emoji="✈️"
-                iconBg="#3b82f6"
-                name="Travel Expert"
-                description="Your personal travel advisor for destinations, itineraries, and tips"
-                tags={["Destinations", "Itineraries", "Travel Tips", "Culture"]}
-                active
-            />
+            <Sidebar />
         </div>
     );
 }
