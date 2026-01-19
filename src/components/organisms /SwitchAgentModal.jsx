@@ -15,113 +15,68 @@ const SwitchAgentModal = ({
                               agents = [],
                           }) => {
     return (
-        <div>
-            <button
-                onClick={() => onClose(true)}
-                style={{
-                    position: 'fixed',
-                    top: '20px',
-                    left: '20px',
-                    padding: '12px 24px',
-                    backgroundColor: '#2563eb',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontSize: '16px',
-                    fontWeight: 600,
+        <Modal open={open} onClose={onClose}>
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: { xs: 0, sm: "50%" },
+                    left: "50%",
+                    transform: {
+                        xs: "translateX(-50%)",
+                        sm: "translate(-50%, -50%)",
+                    },
+                    width: { xs: "100vw", sm: "95vw", md: 920 },
+                    height: { xs: "100vh", sm: "auto" },
+                    maxHeight: { xs: "100vh", sm: "90vh" },
+                    bgcolor: "#fff",
+                    borderRadius: { xs: 0, sm: "16px", md: "24px" },
+                    boxShadow: "0px 20px 60px rgba(0,0,0,0.15)",
+                    overflow: "hidden",
+                    outline: "none",
                 }}
             >
-                Open Modal
-            </button>
-
-            {open && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 1000,
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: { xs: "14px 16px", sm: "20px 24px" },
+                        borderBottom: "1px solid #e5e7eb",
                     }}
-                    onClick={() => onClose(false)}
                 >
-                    <div
-                        style={{
-                            position: 'relative',
-                            width: '920px',
-                            maxWidth: '95vw',
-                            maxHeight: '90vh',
-                            backgroundColor: '#fff',
-                            borderRadius: '24px',
-                            boxShadow: '0px 20px 60px rgba(0,0,0,0.15)',
-                            overflow: 'hidden',
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                padding: '20px 24px',
-                                borderBottom: '1px solid #e5e7eb',
-                            }}
-                        >
-                            <h1 style={{ fontSize: '22px', fontWeight: 900, margin: 0 }}>
-                                Switch Agent
-                            </h1>
+                    <Typography fontSize={{ xs: 18, sm: 22 }} fontWeight={900} m={0}>
+                        Switch Agent
+                    </Typography>
 
-                            <button
-                                onClick={() => onClose()}
-                                style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    border: 'none',
-                                    backgroundColor: 'transparent',
-                                    cursor: 'pointer',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '24px',
-                                    color: '#6b7280',
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                            >
-                                ✕
-                            </button>
-                        </div>
+                    <IconButton onClick={onClose} aria-label="Close">
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
 
-                        <div style={{ padding: '50px', overflowY: 'auto', maxHeight: 'calc(900vh - 100px)' }}>
-                            <div
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(2, 1fr)',
-                                    gap: '50px',
-                                    paddingRight: '25px',
-                                }}
-                            >
-                                {agents.map((agent) => (
-                                    <AgentCard
-                                        key={agent.id}
-                                        {...agent}
-                                        active={agent.id === activeAgentId}
-                                        onClick={() => onAgentSelect(agent.id)}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+                <Box
+                    sx={{
+                        padding: { xs: 2, sm: 3 },
+                        overflowY: "auto",
+                        maxHeight: {
+                            xs: "calc(100vh - 56px)",
+                            sm: "calc(90vh - 76px)",
+                        },
+                    }}
+                >
+                    <Grid container spacing={{ xs: 2, sm: 3 }}>
+                        {agents.map((agent) => (
+                            <Grid item key={agent.id} xs={12} sm={6}>
+                                <AgentCard
+                                    {...agent}
+                                    active={agent.id === activeAgentId}
+                                    onClick={() => onAgentSelect(agent.id)}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Box>
+        </Modal>
     );
 };
 

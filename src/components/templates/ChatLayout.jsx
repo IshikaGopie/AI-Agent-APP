@@ -78,7 +78,7 @@ const agents = [
     },
 ];
 
-const ChatLayout = () => {
+const ChatLayout = ({ onOpenSidebar }) => {
     const [activeAgentId, setActiveAgentId] = useState("travel"); // default agent
 
     // Get active agent details
@@ -90,12 +90,18 @@ const ChatLayout = () => {
     };
 
     return (
-        <Box display="flex" height="98vh">
-            <Box flex={1} display="flex" flexDirection="column">
+        <Box
+            display="flex"
+            sx={{
+                height: { xs: "100vh", md: "98vh" },
+            }}
+        >
+            <Box flex={1} display="flex" flexDirection="column" minWidth={0}>
                 <ChatAgentHeader
                     agentName={activeAgent.name}
                     description={activeAgent.description}
                     onSwitchAgent={handleSwitchAgent}
+                    onMenuClick={onOpenSidebar}
                     agents={agents}
                     activeAgentId={activeAgentId}
                 />

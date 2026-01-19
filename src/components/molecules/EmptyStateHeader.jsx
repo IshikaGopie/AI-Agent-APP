@@ -29,12 +29,16 @@ const EmptyStateHeader = ({
                 size={32}
             />
 
-            <Typography fontSize={28} fontWeight={700} color="#111827">
+            <Typography
+                fontSize={{ xs: 22, sm: 28 }}
+                fontWeight={700}
+                color="#111827"
+            >
                 {title}
             </Typography>
 
             <Typography
-                fontSize={18}
+                fontSize={{ xs: 14, sm: 18 }}
                 color="#6b7280"
                 maxWidth={520}
             >

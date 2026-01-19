@@ -18,7 +18,7 @@ const ExampleQuestionsCard = ({
             }}
         >
             <Typography
-                fontSize={18}
+                fontSize={{ xs: 16, sm: 18 }}
                 fontWeight={600}
                 marginBottom={2}
                 color="#111827"
@@ -31,7 +31,7 @@ const ExampleQuestionsCard = ({
                     <Typography
                         key={index}
                         component="li"
-                        fontSize={16}
+                        fontSize={{ xs: 14, sm: 16 }}
                         color="#374151"
                         marginBottom={1.5}
                     >

@@ -15,13 +15,14 @@ const AgentCard = ({
             style={{
                 cursor: 'pointer',
                 borderRadius: '16px',
-                padding: '20px',
+                padding: '16px',
                 border: active ? '2px solid #2563eb' : '2px solid #e5e7eb',
                 backgroundColor: active ? '#eff6ff' : '#ffffff',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 flexDirection: 'column',
                 width: '100%',
+                boxSizing: 'border-box',
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = '#2563eb';
@@ -34,7 +35,14 @@ const AgentCard = ({
                 }
             }}
         >
-            <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    gap: '16px',
+                    marginBottom: '16px',
+                    alignItems: 'flex-start',
+                }}
+            >
                 <DefaultIcon
                     emoji={emoji}
                     color={iconBg}
@@ -45,7 +53,7 @@ const AgentCard = ({
                 <div style={{ flex: 1, minWidth: 0 }}>
                     <div
                         style={{
-                            fontSize: '18px',
+                            fontSize: '16px',
                             fontWeight: 600,
                             color: '#111827',
                             marginBottom: '4px',
@@ -70,7 +78,8 @@ const AgentCard = ({
             <div
                 style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    // Collapse to a single column on mobile
+                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
                     gap: '6px',
                     marginTop: 'auto',
                 }}
