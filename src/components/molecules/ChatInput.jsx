@@ -5,7 +5,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 import DefaultInput from "../atoms/DefaultInput";
 
-const ChatInput = ({ onSend }) => {
+const ChatInput = ({ onSend, placeholder = "Message agent..." }) => {
     const [message, setMessage] = useState("");
 
     const handleSend = () => {
@@ -15,11 +15,19 @@ const ChatInput = ({ onSend }) => {
         setMessage("");
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            handleSend();
+        }
+    };
+
     return (
         <DefaultInput
-            placeholder="Message Travel Expert..."
+            placeholder={placeholder}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             endAdornment={
                 <InputAdornment position="end">
                     <IconButton onClick={handleSend}>

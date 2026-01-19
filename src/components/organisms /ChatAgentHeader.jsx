@@ -10,6 +10,8 @@ import SwitchAgentModal from "./SwitchAgentModal.jsx";
 const ChatAgentHeader = ({
                              agentName,
                              description,
+                             agentEmoji,
+                             agentColor,
                              onSwitchAgent,
                              onMenuClick,
                              onDownload,
@@ -55,6 +57,8 @@ const ChatAgentHeader = ({
                     <AgentHeader
                         agentName={agentName}
                         description={description}
+                        emoji={agentEmoji}
+                        iconBg={agentColor}
                         onClick={handleOpenModal}
                     />
                 </Box>

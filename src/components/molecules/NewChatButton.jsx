@@ -1,7 +1,7 @@
 import DefaultButton from "../atoms/DefaultButton.jsx";
 import AddIcon from "@mui/icons-material/Add";
 
-const NewChatButton = () => {
+const NewChatButton = ({ onClick }) => {
     return (
         <DefaultButton
             fullWidth
@@ -10,6 +10,7 @@ const NewChatButton = () => {
             bgColor="#2563eb"
             hoverBgColor="#1d4ed8"
             textColor="#ffffff"
+            onClick={onClick}
         >
             New Chat
         </DefaultButton>

@@ -12,7 +12,8 @@ const ChatListItem = ({
                           title = "New Travel Expert Chat",
                           timestamp = "Just now",
                           onDelete,
-                          active = true,
+                          onClick,
+                          active = false,
                       }) => {
     return (
         <Box
@@ -30,6 +31,7 @@ const ChatListItem = ({
                     backgroundColor: "#eff6ff",
                 },
             }}
+            onClick={onClick}
         >
             <DefaultIcon emoji={emoji} color={iconBg} boxSize={40} size={20} />
 
@@ -59,7 +61,10 @@ const ChatListItem = ({
 
             <IconButton
                 size="small"
-                onClick={onDelete}
+                onClick={(event) => {
+                    event.stopPropagation();
+                    onDelete?.();
+                }}
                 sx={{
                     color: "#ef4444",
                     marginTop: "4px",

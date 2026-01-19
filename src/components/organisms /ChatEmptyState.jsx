@@ -2,7 +2,12 @@ import { Box } from "@mui/material";
 import EmptyStateHeader from "../molecules/EmptyStateHeader.jsx";
 import ExampleQuestionsCard from "../molecules/ExampleQuestionsCard.jsx";
 
-const ChatEmptyState = () => {
+const ChatEmptyState = ({
+                            agentEmoji,
+                            agentColor,
+                            agentName = "Agent",
+                            agentDescription = "",
+                        }) => {
     return (
         <Box
             sx={{
@@ -23,7 +28,12 @@ const ChatEmptyState = () => {
                     gap: 3,
                 }}
             >
-                <EmptyStateHeader />
+                <EmptyStateHeader
+                    emoji={agentEmoji}
+                    iconBg={agentColor}
+                    title={`Chat with ${agentName}`}
+                    description={agentDescription}
+                />
                 <ExampleQuestionsCard />
             </Box>
         </Box>

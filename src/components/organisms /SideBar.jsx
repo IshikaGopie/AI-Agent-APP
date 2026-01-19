@@ -5,10 +5,17 @@ import SidebarSearchInput from "../molecules/SidebarSeachInput.jsx";
 import ChatListItem from "../molecules/ChatListItem.jsx";
 import Divider from "../atoms/Divider.jsx";
 
-
 const drawerWidth = 360;
 
-const SidebarContent = ({ onMobileClose }) => {
+const SidebarContent = ({
+                            onMobileClose,
+                            onNewChat,
+                            agents = [],
+                            chats = [],
+                            activeChatId,
+                            onSelectChat,
+                            onDeleteChat,
+                        }) => {
     return (
         <Box display="flex" flexDirection="column" gap={2}>
             <Box
@@ -37,31 +44,48 @@ const SidebarContent = ({ onMobileClose }) => {
                 Agent Chats
             </Typography>
 
-            <NewChatButton />
+            <NewChatButton onClick={onNewChat} />
 
             <Divider />
 
             <SidebarSearchInput />
 
             <Divider />
-            {/*TODO: Make dynamic later */}
             <Box display="flex" flexDirection="column" gap={1.5}>
-                <ChatListItem
-                    emoji="✈️"
-                    agentName="Travel Expert"
-                    title="New Travel Expert Chat"
-                    timestamp="Just now"
-                    onDelete={() => console.log("delete")}
-                />
+                {chats.map((chat) => {
+                    const agent = agents.find((a) => a.id === chat.agentId);
+                    return (
+                        <ChatListItem
+                            key={chat.id}
+                            emoji={agent?.emoji}
+                            iconBg={agent?.iconBg}
+                            agentName={agent?.name}
+                            title={chat.title}
+                            timestamp={chat.timestamp}
+                            active={chat.id === activeChatId}
+                            onDelete={() => onDeleteChat?.(chat.id)}
+                            onClick={() => onSelectChat?.(chat.id)}
+                        />
+                    );
+                })}
             </Box>
         </Box>
     );
 };
 
-const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
+const Sidebar = ({
+                     mobileOpen = false,
+                     onMobileClose,
+                     onNewChat,
+                     agents,
+                     chats,
+                     activeChatId,
+                     onSelectChat,
+                     onDeleteChat,
+                 }) => {
     return (
         <>
-            {/* colapse sidebar on mobile  */}
+            {/* collapse sidebar on mobile  */}
             <Drawer
                 variant="temporary"
                 open={mobileOpen}
@@ -78,7 +102,15 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
                     },
                 }}
             >
-                <SidebarContent onMobileClose={onMobileClose} />
+                <SidebarContent
+                    onMobileClose={onMobileClose}
+                    onNewChat={onNewChat}
+                    agents={agents}
+                    chats={chats}
+                    activeChatId={activeChatId}
+                    onSelectChat={onSelectChat}
+                    onDeleteChat={onDeleteChat}
+                />
             </Drawer>
 
             {/* fixed sidebar on desktop */}
@@ -97,7 +129,14 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
                     },
                 }}
             >
-                <SidebarContent />
+                <SidebarContent
+                    onNewChat={onNewChat}
+                    agents={agents}
+                    chats={chats}
+                    activeChatId={activeChatId}
+                    onSelectChat={onSelectChat}
+                    onDeleteChat={onDeleteChat}
+                />
             </Drawer>
         </>
     );

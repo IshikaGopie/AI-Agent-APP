@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import MessageBubble from "../atoms/MessageBubble";
 
-const ChatMessage = ({ text, isAgent }) => {
+const ChatMessage = ({ text, isAgent, agentEmoji = "🤖", agentColor = "#3b82f6" }) => {
     return (
         <Box
             sx={{
@@ -17,16 +17,16 @@ const ChatMessage = ({ text, isAgent }) => {
                         width: 40,
                         height: 40,
                         borderRadius: "12px",
-                        backgroundColor: "#3b82f6",
+                        backgroundColor: agentColor,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: 18,
                     }}
                 >
-                    ✈️
+                    {agentEmoji}
                 </Box>
-            //  TODO: Replace with agent's avatar
+                //  TODO: Replace with agent's avatar
             )}
 
             <MessageBubble isAgent={isAgent}>
