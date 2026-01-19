@@ -1,10 +1,10 @@
 import React from 'react';
-import Sidebar from "./components/organisms /SideBar.jsx";
+import Assistant from "./pages/Assistant.jsx";
 
 function App() {
     return (
         <div>
-            <Sidebar />
+            <Assistant />
         </div>
     );
 }
