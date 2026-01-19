@@ -7,69 +7,12 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import AgentCard from "../molecules/AgentCard";
 
-// TODO: get from API and store using redux
-const agents = [
-    {
-        id: "travel",
-        emoji: "✈️",
-        iconBg: "#3b82f6",
-        name: "Travel Expert",
-        description:
-            "Your personal travel advisor for destinations, itineraries, and tips",
-        tags: ["Destinations", "Itineraries", "Travel Tips", "Culture"],
-    },
-    {
-        id: "construction",
-        emoji: "🏗️",
-        iconBg: "#f59e0b",
-        name: "Construction Specialist",
-        description:
-            "Expert guidance on building, renovation, and construction projects",
-        tags: ["Building", "Renovation", "Materials", "Safety"],
-    },
-    {
-        id: "health",
-        emoji: "💪",
-        iconBg: "#10b981",
-        name: "Health & Wellness",
-        description:
-            "Guidance on fitness, nutrition, and overall wellbeing",
-        tags: ["Fitness", "Nutrition", "Mental Health", "Lifestyle"],
-    },
-    {
-        id: "finance",
-        emoji: "💰",
-        iconBg: "#8b5cf6",
-        name: "Financial Advisor",
-        description:
-            "Smart financial planning, budgeting, and investment insights",
-        tags: ["Budgeting", "Investing", "Savings", "Planning"],
-    },
-    {
-        id: "tech",
-        emoji: "💻",
-        iconBg: "#ec4899",
-        name: "Tech Guru",
-        description:
-            "Technology solutions, programming help, and digital trends",
-        tags: ["Programming", "Cloud", "AI", "Security"],
-    },
-    {
-        id: "legal",
-        emoji: "⚖️",
-        iconBg: "#6366f1",
-        name: "Legal Assistant",
-        description:
-            "General legal information and guidance (not legal advice)",
-        tags: ["Contracts", "Rights", "Business Law", "Property"],
-    },
-];
-
 const SwitchAgentModal = ({
                               open,
                               onClose,
                               activeAgentId,
                               onAgentSelect,
+                              agents = [],
                           }) => {
     return (
         <Modal open={open} onClose={onClose}>
@@ -79,13 +22,13 @@ const SwitchAgentModal = ({
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    width: "900px",
+                    width: 920,
                     maxWidth: "95vw",
                     maxHeight: "90vh",
-                    overflowY: "auto",
-                    backgroundColor: "#ffffff",
-                    borderRadius: "20px",
-                    boxShadow: 24,
+                    bgcolor: "#fff",
+                    borderRadius: "24px",
+                    boxShadow: "0px 20px 60px rgba(0,0,0,0.15)",
+                    overflow: "hidden",
                 }}
             >
                 <Box
@@ -93,11 +36,12 @@ const SwitchAgentModal = ({
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        padding: "20px 24px",
+                        px: 3,
+                        py: 2.5,
                         borderBottom: "1px solid #e5e7eb",
                     }}
                 >
-                    <Typography fontSize={20} fontWeight={600}>
+                    <Typography fontSize={22} fontWeight={900}>
                         Switch Agent
                     </Typography>
 
@@ -106,10 +50,10 @@ const SwitchAgentModal = ({
                     </IconButton>
                 </Box>
 
-                <Box sx={{ padding: "24px" }}>
-                    <Grid container spacing={3}>
+                <Box sx={{ p: 3, overflowY: "auto", maxHeight: "calc(90vh - 100px)" }}>
+                    <Grid container spacing={2}>
                         {agents.map((agent) => (
-                            <Grid item xs={12} sm={6} key={agent.id}>
+                            <Grid item xs={6} key={agent.id} sx={{ display: "flex" }}>
                                 <AgentCard
                                     {...agent}
                                     active={agent.id === activeAgentId}
