@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../components/organisms /SideBar.jsx";
 import ChatLayout from "../components/templates/ChatLayout.jsx";
+import { aiAgentService } from '../plugins/01.services';
 import {
     sendMessage,
     newChat,
@@ -18,6 +19,13 @@ const Assistant = () => {
     const activeChatId = useSelector((state) => state.agent.activeChatId);
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        aiAgentService
+            .getAgents()
+            .then((data) => console.log("agents:", data))
+            .catch((err) => console.error("getAgents failed:", err));
+    }, []);
 
     const activeChat = useMemo(
         () => sessions.find((session) => session.id === activeChatId) || sessions[0],
