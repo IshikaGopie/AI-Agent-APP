@@ -5,6 +5,7 @@ import Sidebar from "../components/organisms /SideBar.jsx";
 import ChatLayout from "../components/templates/ChatLayout.jsx";
 import { aiAgentService } from '../plugins/01.services';
 import {
+    setAgents,
     sendMessage,
     newChat,
     selectChat,
@@ -23,9 +24,13 @@ const Assistant = () => {
     useEffect(() => {
         aiAgentService
             .getAgents()
-            .then((data) => console.log("agents:", data))
+            .then((data) => {
+                if (Array.isArray(data) && data.length) {
+                    dispatch(setAgents(data));
+                }
+            })
             .catch((err) => console.error("getAgents failed:", err));
-    }, []);
+    }, [dispatch]);
 
     const activeChat = useMemo(
         () => sessions.find((session) => session.id === activeChatId) || sessions[0],

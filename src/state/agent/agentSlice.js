@@ -98,6 +98,11 @@ const agentSlice = createSlice({
     name: 'agent',
     initialState,
     reducers: {
+        setAgents: (state, action) => {
+            const agents = action.payload;
+            if (!Array.isArray(agents) || !agents.length) return;
+            state.agents = agents;
+        },
         sendMessage: (state, action) => {
             const text = action.payload;
             const activeChat = state.sessions.find(
@@ -169,6 +174,7 @@ const agentSlice = createSlice({
 });
 
 export const {
+    setAgents,
     sendMessage,
     newChat,
     selectChat,
