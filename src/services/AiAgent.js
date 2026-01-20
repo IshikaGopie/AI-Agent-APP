@@ -17,4 +17,17 @@ export class AiAgentService {
             "application/json"
         )
     }
+
+    async getConversations() {
+        return this.apiRequest.get(
+            this.baseUrl + '/conversations',
+        )
+    }
+
+    async getConversationMessages(conversationId) {
+        return this.apiRequest.get(
+            this.baseUrl + '/conversations/' + conversationId + '/messages',
+        )
+    }
+
 }

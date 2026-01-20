@@ -5,8 +5,7 @@ export class ApiRequest {
     async get(url, contentType = 'application/json') {
         const response = await axios.get(url, {
             headers: {
-                'Content-Type': contentType,
-                'Accept': '*/*',
+                'Content-Type': contentType
             },
         });
         return response.data;

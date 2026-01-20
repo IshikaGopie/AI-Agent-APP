@@ -6,6 +6,8 @@ import ChatLayout from "../components/templates/ChatLayout.jsx";
 import { aiAgentService } from '../plugins/01.services';
 import {
     setAgents,
+    setSessions,
+    setConversationMessages,
     sendMessage,
     newChat,
     selectChat,
@@ -38,9 +40,49 @@ const Assistant = () => {
     );
 
     const activeAgent = useMemo(
-        () => agents.find((agent) => agent.id === activeChat?.agentId) || agents[0],
+        () =>
+            agents.find(
+                (agent) =>
+                    agent.id === activeChat?.agentId ||
+                    agent.name === activeChat?.agentId,
+            ) || agents[0],
         [agents, activeChat]
     );
+
+    // Load conversations on mount
+    useEffect(() => {
+        aiAgentService
+            .getConversations()
+            .then((data) => {
+                if (Array.isArray(data) && data.length) {
+                    dispatch(setSessions(data));
+                }
+            })
+            .catch((err) => console.error("getConversations failed:", err));
+    }, [dispatch]);
+
+    // Load messages for the active chat
+    useEffect(() => {
+        if (!activeChat?.id || (activeChat.messages && activeChat.messages.length)) {
+            return;
+        }
+
+        aiAgentService
+            .getConversationMessages(activeChat.id)
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    dispatch(
+                        setConversationMessages({
+                            conversationId: activeChat.id,
+                            messages: data,
+                        }),
+                    );
+                }
+            })
+            .catch((err) =>
+                console.error("getConversationMessages failed:", err),
+            );
+    }, [activeChat?.id]);
 
     const handleSendMessage = (text) => {
         dispatch(sendMessage(text));
@@ -52,6 +94,22 @@ const Assistant = () => {
 
     const handleSelectChat = (chatId) => {
         dispatch(selectChat(chatId));
+
+        aiAgentService
+            .getConversationMessages(chatId)
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    dispatch(
+                        setConversationMessages({
+                            conversationId: chatId,
+                            messages: data,
+                        }),
+                    );
+                }
+            })
+            .catch((err) =>
+                console.error("getConversationMessages failed:", err),
+            );
     };
 
     const handleSwitchAgent = (agentId) => {

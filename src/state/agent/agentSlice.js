@@ -1,63 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// TODO: fetch agents from API
-const initialAgents = [
-    {
-        id: 'travel',
-        emoji: '✈️',
-        iconBg: '#3b82f6',
-        name: 'Travel Expert',
-        description:
-            'Your personal travel advisor for destinations, itineraries, and tips',
-        tags: ['Destinations', 'Itineraries', 'Travel Tips', 'Culture'],
-    },
-    {
-        id: 'construction',
-        emoji: '🏗️',
-        iconBg: '#f59e0b',
-        name: 'Construction Specialist',
-        description:
-            'Expert guidance on building, renovation, and construction projects',
-        tags: ['Building', 'Renovation', 'Materials', 'Safety'],
-    },
-    {
-        id: 'health',
-        emoji: '💪',
-        iconBg: '#10b981',
-        name: 'Health & Wellness',
-        description:
-            'Guidance on fitness, nutrition, and overall wellbeing',
-        tags: ['Fitness', 'Nutrition', 'Mental Health', 'Lifestyle'],
-    },
-    {
-        id: 'finance',
-        emoji: '💰',
-        iconBg: '#8b5cf6',
-        name: 'Financial Advisor',
-        description:
-            'Smart financial planning, budgeting, and investment insights',
-        tags: ['Budgeting', 'Investing', 'Savings', 'Planning'],
-    },
-    {
-        id: 'tech',
-        emoji: '💻',
-        iconBg: '#ec4899',
-        name: 'Tech Guru',
-        description:
-            'Technology solutions, programming help, and digital trends',
-        tags: ['Programming', 'Cloud', 'AI', 'Security'],
-    },
-    {
-        id: 'legal',
-        emoji: '⚖️',
-        iconBg: '#6366f1',
-        name: 'Legal Assistant',
-        description:
-            'General legal information and guidance (not legal advice)',
-        tags: ['Contracts', 'Rights', 'Business Law', 'Property'],
-    },
-];
-
 const createSession = (agent) => ({
     id: `chat-${Date.now()}`,
     agentId: agent.id,
@@ -66,32 +8,10 @@ const createSession = (agent) => ({
     timestamp: 'Just now',
 });
 
-// TODO: fetch chats from API
-const createInitialSessions = () => ([
-    {
-        id: 'chat-1',
-        agentId: 'travel',
-        title: 'New Travel Expert Chat',
-        messages: [
-            {
-                id: 'msg-1',
-                text: "Hello! I'm planning a trip to Europe next summer. Can you help me with some recommendations?",
-                isAgent: false,
-            },
-            {
-                id: 'msg-2',
-                text: 'Great question! Based on my travel expertise...',
-                isAgent: true,
-            },
-        ],
-        timestamp: 'Just now',
-    },
-]);
-
 const initialState = {
-    agents: initialAgents,
-    sessions: createInitialSessions(),
-    activeChatId: 'chat-1',
+    agents: [], // list of agents fetched from the API
+    sessions: [], // conversations fetched from the API
+    activeChatId: null,
 };
 
 const agentSlice = createSlice({
@@ -102,6 +22,47 @@ const agentSlice = createSlice({
             const agents = action.payload;
             if (!Array.isArray(agents) || !agents.length) return;
             state.agents = agents;
+        },
+
+        // set the list of conversations fetched from the API
+        setSessions: (state, action) => {
+            const conversations = action.payload;
+            if (!Array.isArray(conversations) || !conversations.length) return;
+
+            state.sessions = conversations.map((conversation) => ({
+                id: conversation.id,
+                agentId: conversation.agent,
+                title:
+                    typeof conversation.title === 'string'
+                        ? conversation.title.replace(/^"(.*)"$/, '$1')
+                        : conversation.title,
+                messages: [],
+                timestamp: conversation.createdAt,
+            }));
+
+            state.activeChatId = state.sessions[0]?.id ?? null;
+        },
+        setConversationMessages: (state, action) => {
+            const { conversationId, messages } = action.payload || {};
+            if (!conversationId || !Array.isArray(messages)) return;
+
+            const session = state.sessions.find(
+                (s) => s.id === conversationId,
+            );
+            if (!session) return;
+
+            session.messages = messages.map((message) => ({
+                id: message.id,
+                text: message.content,
+                isAgent: message.role === 'assistant',
+                timestamp: message.timestamp,
+            }));
+
+            // set the timestamp to the time of the last message in the conversation
+            if (session.messages.length) {
+                session.timestamp =
+                    session.messages[session.messages.length - 1].timestamp;
+            }
         },
         sendMessage: (state, action) => {
             const text = action.payload;
@@ -175,6 +136,8 @@ const agentSlice = createSlice({
 
 export const {
     setAgents,
+    setSessions,
+    setConversationMessages,
     sendMessage,
     newChat,
     selectChat,
