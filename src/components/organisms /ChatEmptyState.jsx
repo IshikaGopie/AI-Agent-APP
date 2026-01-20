@@ -7,6 +7,7 @@ const ChatEmptyState = ({
                             agentColor,
                             agentName = "Agent",
                             agentDescription = "",
+                            agentExamples = [],
                         }) => {
     return (
         <Box
@@ -34,7 +35,9 @@ const ChatEmptyState = ({
                     title={`Chat with ${agentName}`}
                     description={agentDescription}
                 />
-                <ExampleQuestionsCard />
+                <ExampleQuestionsCard
+                    questions={agentExamples}
+                />
             </Box>
         </Box>
     );

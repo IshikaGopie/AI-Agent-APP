@@ -45,6 +45,7 @@ const ChatLayout = ({
                         agentColor={resolvedAgent?.iconBg}
                         agentName={resolvedAgent?.name}
                         agentDescription={resolvedAgent?.description}
+                        agentExamples={resolvedAgent?.examples}
                     />
                 </Box>
 

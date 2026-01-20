@@ -7,6 +7,7 @@ const ChatConversation = ({
                               agentColor,
                               agentName,
                               agentDescription,
+                              agentExamples,
                           }) => {
     if (!messages.length) {
         return (
@@ -15,6 +16,7 @@ const ChatConversation = ({
                 agentColor={agentColor}
                 agentName={agentName}
                 agentDescription={agentDescription}
+                agentExamples={agentExamples}
             />
         );
     }
