@@ -168,6 +168,12 @@ const Assistant = () => {
         dispatch(switchAgent(agentId));
     };
 
+    const deleteChat = (chatId) => {
+        aiAgentService.deleteConversation(chatId).then(() => {
+            dispatch(setSessions(sessions.filter((session) => session.id !== chatId)));
+        }).catch((err) => console.error("deleteConversation failed:", err));
+    }
+
     return (
         <Box
             display="flex"
@@ -185,6 +191,7 @@ const Assistant = () => {
                 activeChatId={activeChat?.id}
                 onNewChat={() => handleNewChat(activeAgent?.id)}
                 onSelectChat={handleSelectChat}
+                onDeleteChat={deleteChat}
             />
 
             <Box flex={1} minWidth={0}>

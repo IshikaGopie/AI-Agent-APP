@@ -50,4 +50,11 @@ export class AiAgentService {
         )
     }
 
+    //  delete conversation
+    async deleteConversation(conversationId) {
+        return this.apiRequest.delete(
+            this.baseUrl + '/conversations/' + conversationId,
+        )
+    }
+
 }
