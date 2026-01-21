@@ -23,12 +23,14 @@ const ChatConversation = ({
     }
 
     return (
-        <ChatMessagesList
-            messages={messages}
-            agentEmoji={agentEmoji}
-            agentColor={agentColor}
-            isLoadingResponse={isLoadingResponse}
-        />
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+            <ChatMessagesList
+                messages={messages}
+                agentEmoji={agentEmoji}
+                agentColor={agentColor}
+                isLoadingResponse={isLoadingResponse}
+            />
+        </div>
     );
 };
 

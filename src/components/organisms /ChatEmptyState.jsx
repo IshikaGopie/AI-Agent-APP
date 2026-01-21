@@ -13,10 +13,13 @@ const ChatEmptyState = ({
         <Box
             sx={{
                 flex: 1,
+                height: "100%",
+                minHeight: 0,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 padding: 4,
+                overflowY: "auto",
             }}
         >
             <Box

@@ -12,6 +12,8 @@ const ChatMessagesList = ({ messages, agentEmoji, agentColor, isLoadingResponse 
                 flexDirection: "column",
                 gap: 2,
                 overflowY: "auto",
+                minHeight: 0,
+                height: "100%",
             }}
         >
             {messages.map((msg) => (

@@ -39,7 +39,13 @@ const ChatLayout = ({
                     activeAgentId={resolvedAgent?.id}
                 />
 
-                <Box flex={1} overflow="hidden">
+                <Box 
+                    flex={1} 
+                    overflow="hidden"
+                    display="flex"
+                    flexDirection="column"
+                    minHeight={0}
+                >
                     <ChatConversation
                         messages={messages}
                         agentEmoji={resolvedAgent?.emoji}
