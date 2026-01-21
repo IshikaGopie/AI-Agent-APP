@@ -64,6 +64,13 @@ const Assistant = () => {
             .catch((err) => console.error("getConversations failed:", err));
     }, [dispatch]);
 
+    // create a new chat if no convos were found
+    useEffect(() => {
+        if (agents.length > 0 && sessions.length === 0) {
+            dispatch(newChat(agents[0].id));
+        }
+    }, [agents, sessions, dispatch]);
+
     // load messages for the active chat
     useEffect(() => {
         if (!activeChat?.id || (activeChat.messages && activeChat.messages.length)) {
