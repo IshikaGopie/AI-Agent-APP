@@ -30,4 +30,24 @@ export class AiAgentService {
         )
     }
 
+    // create conversation
+    async createConversation(agentId) {
+        return this.apiRequest.post(
+            this.baseUrl + '/conversations',
+            {agent: agentId},
+            "application/json"
+        )
+    }
+
+    // chat - creates mesages and returns AI response
+    async chat(conversationId, message) {
+        return this.apiRequest.post(
+            this.baseUrl + '/chat',
+            {
+                conversationId: conversationId,
+                message: message
+            }
+        )
+    }
+
 }

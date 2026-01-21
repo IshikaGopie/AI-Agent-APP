@@ -13,6 +13,7 @@ const ChatLayout = ({
                         messages = [],
                         onSendMessage,
                         onSwitchAgent,
+                        isLoadingResponse = false,
                     }) => {
     const resolvedAgent =
         activeAgent ||
@@ -46,6 +47,7 @@ const ChatLayout = ({
                         agentName={resolvedAgent?.name}
                         agentDescription={resolvedAgent?.description}
                         agentExamples={resolvedAgent?.examples}
+                        isLoadingResponse={isLoadingResponse}
                     />
                 </Box>
 

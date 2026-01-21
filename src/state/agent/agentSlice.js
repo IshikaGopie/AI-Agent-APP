@@ -11,7 +11,8 @@ const createSession = (agent) => ({
 const initialState = {
     agents: [], // list of agents fetched from the API
     sessions: [], // conversations fetched from the API
-    activeChatId: null,
+    activeChatId: null, // id of the active chat
+    isLoadingResponse: false, // loading state for AI response
 };
 
 const agentSlice = createSlice({
@@ -131,6 +132,19 @@ const agentSlice = createSlice({
             state.sessions.unshift(session);
             state.activeChatId = session.id;
         },
+        updateSessionId: (state, action) => {
+            const { oldId, newId } = action.payload;
+            const session = state.sessions.find((s) => s.id === oldId);
+            if (!session) return;
+
+            session.id = newId;
+            if (state.activeChatId === oldId) {
+                state.activeChatId = newId;
+            }
+        },
+        setLoadingResponse: (state, action) => {
+            state.isLoadingResponse = action.payload;
+        },
     },
 });
 
@@ -142,6 +156,8 @@ export const {
     newChat,
     selectChat,
     switchAgent,
+    updateSessionId,
+    setLoadingResponse,
 } = agentSlice.actions;
 
 export default agentSlice.reducer;

@@ -8,8 +8,9 @@ const ChatConversation = ({
                               agentName,
                               agentDescription,
                               agentExamples,
+                              isLoadingResponse,
                           }) => {
-    if (!messages.length) {
+    if (!messages.length && !isLoadingResponse) {
         return (
             <ChatEmptyState
                 agentEmoji={agentEmoji}
@@ -26,6 +27,7 @@ const ChatConversation = ({
             messages={messages}
             agentEmoji={agentEmoji}
             agentColor={agentColor}
+            isLoadingResponse={isLoadingResponse}
         />
     );
 };

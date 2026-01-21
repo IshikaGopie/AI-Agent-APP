@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import ChatMessage from "../molecules/ChatMessage";
+import LoadingBubble from "../atoms/LoadingBubble";
 
-const ChatMessagesList = ({ messages, agentEmoji, agentColor }) => {
+const ChatMessagesList = ({ messages, agentEmoji, agentColor, isLoadingResponse }) => {
     return (
         <Box
             sx={{
@@ -22,6 +23,9 @@ const ChatMessagesList = ({ messages, agentEmoji, agentColor }) => {
                     agentColor={agentColor}
                 />
             ))}
+            {isLoadingResponse && (
+                <LoadingBubble agentEmoji={agentEmoji} agentColor={agentColor} />
+            )}
         </Box>
     );
 };

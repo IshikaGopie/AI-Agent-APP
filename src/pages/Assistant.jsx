@@ -12,6 +12,8 @@ import {
     newChat,
     selectChat,
     switchAgent,
+    updateSessionId,
+    setLoadingResponse,
 } from "../state/agent/agentSlice";
 
 const Assistant = () => {
@@ -20,6 +22,7 @@ const Assistant = () => {
     const agents = useSelector((state) => state.agent.agents);
     const sessions = useSelector((state) => state.agent.sessions);
     const activeChatId = useSelector((state) => state.agent.activeChatId);
+    const isLoadingResponse = useSelector((state) => state.agent.isLoadingResponse);
 
     const dispatch = useDispatch();
 
@@ -49,7 +52,7 @@ const Assistant = () => {
         [agents, activeChat]
     );
 
-    // Load conversations on mount
+    // load conversations on mount
     useEffect(() => {
         aiAgentService
             .getConversations()
@@ -61,7 +64,7 @@ const Assistant = () => {
             .catch((err) => console.error("getConversations failed:", err));
     }, [dispatch]);
 
-    // Load messages for the active chat
+    // load messages for the active chat
     useEffect(() => {
         if (!activeChat?.id || (activeChat.messages && activeChat.messages.length)) {
             return;
@@ -84,8 +87,57 @@ const Assistant = () => {
             );
     }, [activeChat?.id]);
 
-    const handleSendMessage = (text) => {
+    const handleSendMessage = async (text) => {
+        if (!text?.trim() || !activeChat || !activeAgent) return;
+
+        const isNewChat = activeChat.id?.startsWith('chat-') || !activeChat.messages?.length;
+        let conversationId = activeChat.id;
+
+        // create convo on first message
+        if (isNewChat) {
+            try {
+                const conversation = await aiAgentService.createConversation(activeAgent.id);
+                if (conversation?.id) {
+                    conversationId = conversation.id;
+                    // Update the active chat in state
+                    dispatch(updateSessionId({
+                        oldId: activeChat.id,
+                        newId: conversationId,
+                    }));
+                }
+            } catch (err) {
+                console.error("createConversation failed:", err);
+                return;
+            }
+        }
+
+        // add user message to state
         dispatch(sendMessage(text));
+
+        // set loading state to show loading bubble
+        dispatch(setLoadingResponse(true));
+
+        // send message to AI agent
+        try {
+            const response = await aiAgentService.chat(conversationId, text);
+            if (response) {
+                // load messages from API and update state
+                const messages = await aiAgentService.getConversationMessages(conversationId);
+                if (Array.isArray(messages)) {
+                    dispatch(
+                        setConversationMessages({
+                            conversationId,
+                            messages,
+                        }),
+                    );
+                }
+            }
+        } catch (err) {
+            console.error("chat failed:", err);
+        } finally {
+            // update loading state to hide loading bubble
+            dispatch(setLoadingResponse(false));
+        }
     };
 
     const handleNewChat = (agentId = activeAgent?.id) => {
@@ -144,6 +196,7 @@ const Assistant = () => {
                     messages={activeChat?.messages || []}
                     onSendMessage={handleSendMessage}
                     onSwitchAgent={handleSwitchAgent}
+                    isLoadingResponse={isLoadingResponse}
                 />
             </Box>
         </Box>
