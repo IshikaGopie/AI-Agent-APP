@@ -15,6 +15,7 @@ import {
     updateSessionId,
     setLoadingResponse,
     deleteSession,
+    clearConversationMessages,
 } from "../state/agent/agentSlice";
 
 const Assistant = () => {
@@ -182,6 +183,14 @@ const Assistant = () => {
         }).catch((err) => console.error("deleteConversation failed:", err));
     }
 
+    const clearConversation = () => {
+        aiAgentService.clearConversation(activeChat?.id)
+            .then(() => {
+                dispatch(clearConversationMessages(activeChat?.id));
+            })
+            .catch((err) => console.error("clearConversation failed:", err));
+    }
+
     return (
         <Box
             display="flex"
@@ -212,6 +221,7 @@ const Assistant = () => {
                     onSendMessage={handleSendMessage}
                     onSwitchAgent={handleSwitchAgent}
                     isLoadingResponse={isLoadingResponse}
+                    onClear={clearConversation}
                 />
             </Box>
         </Box>

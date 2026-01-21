@@ -145,6 +145,14 @@ const agentSlice = createSlice({
         setLoadingResponse: (state, action) => {
             state.isLoadingResponse = action.payload;
         },
+        clearConversationMessages: (state, action) => {
+            const chatId = action.payload;
+            const chatIndex = state.sessions.findIndex((s) => s.id === chatId);
+            if (chatIndex === -1) return;
+            const session = state.sessions[chatIndex];
+            session.messages = [];
+            session.timestamp = 'Just now';
+        },
         deleteSession: (state, action) => {
             const chatId = action.payload;
             const chatIndex = state.sessions.findIndex((s) => s.id === chatId);
@@ -153,9 +161,9 @@ const agentSlice = createSlice({
             // Remove the chat from sessions
             state.sessions.splice(chatIndex, 1);
 
-            // If the deleted chat was active, select another chat
+            // If the deleted chat was activeselect another chat
             if (state.activeChatId === chatId) {
-                // If there are no more chats, set activeChatId to null
+                // If there are no more chats set activeChatId to null
                 if (state.sessions.length > 0) {
                     const newIndex = chatIndex < state.sessions.length ? chatIndex : chatIndex - 1;
                     state.activeChatId = state.sessions[newIndex]?.id ?? state.sessions[0]?.id ?? null;
@@ -178,6 +186,7 @@ export const {
     updateSessionId,
     setLoadingResponse,
     deleteSession,
+    clearConversationMessages,
 } = agentSlice.actions;
 
 export default agentSlice.reducer;

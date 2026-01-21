@@ -57,4 +57,11 @@ export class AiAgentService {
         )
     }
 
+    // clear conversation
+    async clearConversation(conversationId) {
+        return this.apiRequest.delete(
+            this.baseUrl + '/conversations/' + conversationId + '/clear',
+        )
+    }
+
 }
