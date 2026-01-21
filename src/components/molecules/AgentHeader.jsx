@@ -4,10 +4,10 @@ import Typography from "@mui/material/Typography";
 import DefaultIcon from "../atoms/DefaultIcon";
 
 const AgentHeader = ({
-                         emoji = "✈️",
-                         iconBg = "#3b82f6",
-                         agentName = "Travel Expert",
-                         description = "Your personal travel advisor for destinations, itineraries, and tips",
+                         emoji,
+                         iconBg,
+                         agentName,
+                         description,
                          onClick,
                      }) => {
     return (

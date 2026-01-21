@@ -6,11 +6,11 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DefaultIcon from "../atoms/DefaultIcon";
 
 const ChatListItem = ({
-                          emoji = "✈️",
-                          iconBg = "#3b82f6",
-                          agentName = "Travel Expert",
-                          title = "New Travel Expert Chat",
-                          timestamp = "Just now",
+                          emoji ,
+                          iconBg,
+                          agentName,
+                          title ,
+                          timestamp,
                           onDelete,
                           onClick,
                           active = false,

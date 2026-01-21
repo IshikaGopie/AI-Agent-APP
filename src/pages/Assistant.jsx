@@ -14,6 +14,7 @@ import {
     switchAgent,
     updateSessionId,
     setLoadingResponse,
+    deleteSession,
 } from "../state/agent/agentSlice";
 
 const Assistant = () => {
@@ -177,7 +178,7 @@ const Assistant = () => {
 
     const deleteChat = (chatId) => {
         aiAgentService.deleteConversation(chatId).then(() => {
-            dispatch(setSessions(sessions.filter((session) => session.id !== chatId)));
+            dispatch(deleteSession(chatId));
         }).catch((err) => console.error("deleteConversation failed:", err));
     }
 
