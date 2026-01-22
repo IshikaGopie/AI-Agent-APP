@@ -79,6 +79,11 @@ const Assistant = () => {
             return;
         }
 
+        // Skip loading messages for new local sessions
+        if (activeChat.id?.startsWith('chat-')) {
+            return;
+        }
+
         aiAgentService
             .getConversationMessages(activeChat.id)
             .then((data) => {
