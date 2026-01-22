@@ -39,6 +39,13 @@ export class AiAgentService {
         )
     }
 
+    // get conversation
+    async getConversation(conversationId) {
+        return this.apiRequest.get(
+            this.baseUrl + '/conversations/' + conversationId,
+        )
+    }
+
     // chat - creates mesages and returns AI response
     async chat(conversationId, message) {
         return this.apiRequest.post(

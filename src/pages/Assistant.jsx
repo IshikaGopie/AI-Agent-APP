@@ -16,6 +16,7 @@ import {
     setLoadingResponse,
     deleteSession,
     clearConversationMessages,
+    updateSessionTitle
 } from "../state/agent/agentSlice";
 
 const Assistant = () => {
@@ -112,6 +113,7 @@ const Assistant = () => {
         if (isNewChat) {
             try {
                 const conversation = await aiAgentService.createConversation(activeAgent.id);
+                console.log('conversation', conversation);
                 if (conversation?.id) {
                     conversationId = conversation.id;
                     // Update the active chat in state
@@ -153,6 +155,13 @@ const Assistant = () => {
             // update loading state to hide loading bubble
             dispatch(setLoadingResponse(false));
         }
+
+        // get conversation by id to update title
+        aiAgentService.getConversation(conversationId)
+            .then((conversation) => {
+                dispatch(updateSessionTitle({ sessionId: conversationId, title: conversation.title }));
+            })
+            .catch((err) => console.error("getConversation failed:", err));
     };
 
     const handleNewChat = (agentId = activeAgent?.id) => {

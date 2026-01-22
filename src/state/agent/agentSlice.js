@@ -148,6 +148,15 @@ const agentSlice = createSlice({
                 state.activeChatId = newId;
             }
         },
+        updateSessionTitle: (state, action) => {
+            const { sessionId, title } = action.payload;
+            const session = state.sessions.find((s) => s.id === sessionId);
+            if (!session || !title) return;
+
+            session.title = typeof title === 'string'
+                ? title.replace(/^"(.*)"$/, '$1')
+                : title;
+        },
         setLoadingResponse: (state, action) => {
             state.isLoadingResponse = action.payload;
         },
@@ -196,6 +205,7 @@ export const {
     setLoadingResponse,
     deleteSession,
     clearConversationMessages,
+    updateSessionTitle,
 } = agentSlice.actions;
 
 export default agentSlice.reducer;
