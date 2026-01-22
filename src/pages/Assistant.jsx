@@ -99,7 +99,8 @@ const Assistant = () => {
     const handleSendMessage = async (text) => {
         if (!text?.trim() || !activeChat || !activeAgent) return;
 
-        const isNewChat = activeChat.id?.startsWith('chat-') || !activeChat.messages?.length;
+        // check if this is a new chat that needs to be created
+        const isNewChat = activeChat.id?.startsWith('chat-') && !activeChat.isCleared;
         let conversationId = activeChat.id;
 
         // create convo on first message

@@ -13,6 +13,7 @@ const initialState = {
     sessions: [], // conversations fetched from the API
     activeChatId: null, // id of the active chat
     isLoadingResponse: false, // loading state for AI response
+    isCleared: false, // flag to indicate if the conversation was cleared
 };
 
 const agentSlice = createSlice({
@@ -76,8 +77,13 @@ const agentSlice = createSlice({
                 id: `msg-${Date.now()}`,
                 text,
                 isAgent: false,
-            });
+            })
+
             activeChat.timestamp = 'Just now';
+            // Clear the isCleared flag since we're adding a new message
+            if (activeChat.isCleared) {
+                activeChat.isCleared = false;
+            }
         },
         newChat: (state, action) => {
             const agentId = action.payload;
@@ -152,6 +158,9 @@ const agentSlice = createSlice({
             const session = state.sessions[chatIndex];
             session.messages = [];
             session.timestamp = 'Just now';
+            // Mark that this is a cleared existing conversation not a new one
+            session.isCleared = true;
+
         },
         deleteSession: (state, action) => {
             const chatId = action.payload;
