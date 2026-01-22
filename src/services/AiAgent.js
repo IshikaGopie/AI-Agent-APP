@@ -71,4 +71,11 @@ export class AiAgentService {
         )
     }
 
+    // download conversation
+    async downloadConversation(conversationId) {
+        return this.apiRequest.get(
+            this.baseUrl + '/conversations/' + conversationId + '/download',
+        )
+    }
+
 }

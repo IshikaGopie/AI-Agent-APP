@@ -15,6 +15,7 @@ const ChatLayout = ({
                         onSwitchAgent,
                         isLoadingResponse = false,
                         onClear,
+                        onDownload,
                     }) => {
     const resolvedAgent =
         activeAgent ||
@@ -36,8 +37,8 @@ const ChatLayout = ({
                     agentColor={resolvedAgent?.iconBg}
                     onSwitchAgent={onSwitchAgent}
                     onMenuClick={onOpenSidebar}
-                    onDownload={() => console.log("Download")}
                     onClear={onClear}
+                    onDownload={onDownload}
                     agents={agents}
                     activeAgentId={resolvedAgent?.id}
                 />

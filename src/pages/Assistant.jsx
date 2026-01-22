@@ -168,6 +168,27 @@ const Assistant = () => {
         dispatch(newChat(agentId));
     };
 
+    // download conversations by conversation ID
+    const handleDownload = (conversationId = activeChat?.id, title = activeChat?.title) => {
+        aiAgentService.downloadConversation(conversationId)
+            .then((blob) => {
+                const pdfBlob = blob instanceof Blob ? blob : new Blob([blob], { type: "application/pdf" });
+
+                const url = window.URL.createObjectURL(pdfBlob);
+
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `${title}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch((err) => console.error("downloadConversation failed:", err));
+    };
+
+
     const handleSelectChat = (chatId) => {
         dispatch(selectChat(chatId));
 
@@ -237,6 +258,7 @@ const Assistant = () => {
                     onSwitchAgent={handleSwitchAgent}
                     isLoadingResponse={isLoadingResponse}
                     onClear={clearConversation}
+                    onDownload={handleDownload}
                 />
             </Box>
         </Box>
