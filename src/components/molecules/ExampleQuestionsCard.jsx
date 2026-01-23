@@ -1,13 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const ExampleQuestionsCard = ({
-                                  questions = [
-                                      "What are the best places to visit in Japan?",
-                                      "Plan a 7-day trip to Europe",
-                                      "What should I pack for a beach vacation?",
-                                  ],
-                              }) => {
+const ExampleQuestionsCard = ({questions}) => {
     return (
         <Box
             sx={{

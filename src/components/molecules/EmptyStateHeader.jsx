@@ -4,10 +4,10 @@ import Typography from "@mui/material/Typography";
 import DefaultIcon from "../atoms/DefaultIcon";
 
 const EmptyStateHeader = ({
-                              emoji = "✈️",
-                              iconBg = "#3b82f6",
-                              title = "Chat with Travel Expert",
-                              description = "Your personal travel advisor for destinations, itineraries, and tips",
+                              emoji,
+                              iconBg,
+                              title,
+                              description ,
                           }) => {
     return (
 

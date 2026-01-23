@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const createSession = (agent) => ({
+const createSession = (agent, selectedModel = null) => ({
     id: `chat-${Date.now()}`,
     agentId: agent.id,
     title: `New ${agent.name} Chat`,
     messages: [],
     timestamp: 'Just now',
+    selectedModel: selectedModel,
 });
 
 const initialState = {
     agents: [], // list of agents fetched from the API
+    models: [], // list of models fetched from the API
     sessions: [], // conversations fetched from the API
     activeChatId: null, // id of the active chat
     isLoadingResponse: false, // loading state for AI response
@@ -26,6 +28,20 @@ const agentSlice = createSlice({
             state.agents = agents;
         },
 
+        setModels: (state, action) => {
+            const models = action.payload;
+            if (!Array.isArray(models) || !models.length) return;
+            state.models = models;
+            
+            // Set default model for sessions that don't have one
+            const defaultModelId = models[0]?.id || null;
+            state.sessions.forEach((session) => {
+                if (!session.selectedModel && defaultModelId) {
+                    session.selectedModel = defaultModelId;
+                }
+            });
+        },
+
         // set the list of conversations fetched from the API
         setSessions: (state, action) => {
             const conversations = action.payload;
@@ -40,6 +56,7 @@ const agentSlice = createSlice({
                         : conversation.title,
                 messages: [],
                 timestamp: conversation.createdAt,
+                selectedModel: conversation.selectedModel || null,
             }));
 
             state.activeChatId = state.sessions[0]?.id ?? null;
@@ -91,7 +108,8 @@ const agentSlice = createSlice({
                 state.agents.find((a) => a.id === agentId) ?? state.agents[0];
             if (!agent) return;
 
-            const session = createSession(agent);
+            const defaultModelId = state.models[0]?.id || null;
+            const session = createSession(agent, defaultModelId);
             state.sessions.unshift(session);
             state.activeChatId = session.id;
         },
@@ -110,7 +128,8 @@ const agentSlice = createSlice({
 
             if (!activeChat) {
                 // create a new chat for that agent if no chat is active
-                const session = createSession(agent);
+                const defaultModelId = state.models[0]?.id || null;
+                const session = createSession(agent, defaultModelId);
                 state.sessions.unshift(session);
                 state.activeChatId = session.id;
                 return;
@@ -134,7 +153,8 @@ const agentSlice = createSlice({
                 return;
             }
 
-            const session = createSession(agent);
+            const defaultModelId = state.models[0]?.id || null;
+            const session = createSession(agent, defaultModelId);
             state.sessions.unshift(session);
             state.activeChatId = session.id;
         },
@@ -190,6 +210,13 @@ const agentSlice = createSlice({
                 }
             }
         },
+        setSelectedModel: (state, action) => {
+            const { sessionId, modelId } = action.payload;
+            const session = state.sessions.find((s) => s.id === sessionId);
+            if (session) {
+                session.selectedModel = modelId;
+            }
+        },
     },
 });
 
@@ -206,6 +233,8 @@ export const {
     deleteSession,
     clearConversationMessages,
     updateSessionTitle,
+    setModels,
+    setSelectedModel,
 } = agentSlice.actions;
 
 export default agentSlice.reducer;

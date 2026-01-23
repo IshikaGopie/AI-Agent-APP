@@ -47,13 +47,19 @@ export class AiAgentService {
     }
 
     // chat - creates mesages and returns AI response
-    async chat(conversationId, message) {
+    async chat(conversationId, message, model = null) {
+        const payload = {
+            conversationId: conversationId,
+            message: message
+        };
+        
+        if (model) {
+            payload.model = model;
+        }
+        
         return this.apiRequest.post(
             this.baseUrl + '/chat',
-            {
-                conversationId: conversationId,
-                message: message
-            }
+            payload
         )
     }
 
@@ -78,4 +84,10 @@ export class AiAgentService {
         )
     }
 
+    // get models
+    async getModels() {
+        return this.apiRequest.get(
+            this.baseUrl + '/models',
+        )
+    }
 }

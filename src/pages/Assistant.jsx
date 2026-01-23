@@ -17,7 +17,9 @@ import {
     setLoadingResponse,
     deleteSession,
     clearConversationMessages,
-    updateSessionTitle
+    updateSessionTitle,
+    setModels,
+    setSelectedModel,
 } from "../state/agent/agentSlice";
 
 const Assistant = () => {
@@ -27,6 +29,7 @@ const Assistant = () => {
     const sessions = useSelector((state) => state.agent.sessions);
     const activeChatId = useSelector((state) => state.agent.activeChatId);
     const isLoadingResponse = useSelector((state) => state.agent.isLoadingResponse);
+    const models = useSelector((state) => state.agent.models);
 
     const dispatch = useDispatch();
     const { showError } = useNotification();
@@ -41,6 +44,18 @@ const Assistant = () => {
             })
             .catch((err) => showError(err.message || 'Failed to load agents'));
     }, [dispatch, showError]);
+
+    useEffect(() => {
+        aiAgentService
+            .getModels()
+            .then((data) => {
+                if (Array.isArray(data) && data.length) {
+                    console.log('models', data);
+                    dispatch(setModels(data));
+                }
+            })
+            .catch((err) => showError(err.message || 'Failed to load models'));
+    }, [dispatch, showError])
 
     const activeChat = useMemo(
         () => sessions.find((session) => session.id === activeChatId) || sessions[0],
@@ -137,7 +152,8 @@ const Assistant = () => {
 
         // send message to AI agent
         try {
-            const response = await aiAgentService.chat(conversationId, text);
+            const selectedModel = activeChat?.selectedModel || models[0]?.id || null;
+            const response = await aiAgentService.chat(conversationId, text, selectedModel);
             if (response) {
                 // load messages from API and update state
                 const messages = await aiAgentService.getConversationMessages(conversationId);
@@ -226,6 +242,15 @@ const Assistant = () => {
             .catch((err) => showError(err.message || 'Failed to clear conversation'));
     }
 
+    const handleModelChange = (modelId) => {
+        if (activeChat?.id) {
+            dispatch(setSelectedModel({
+                sessionId: activeChat.id,
+                modelId: modelId,
+            }));
+        }
+    };
+
     return (
         <Box
             display="flex"
@@ -258,6 +283,9 @@ const Assistant = () => {
                     isLoadingResponse={isLoadingResponse}
                     onClear={clearConversation}
                     onDownload={handleDownload}
+                    models={models}
+                    selectedModelId={activeChat?.selectedModel || models[0]?.id || null}
+                    onModelChange={handleModelChange}
                 />
             </Box>
         </Box>

@@ -6,6 +6,7 @@ import AgentHeader from "../molecules/AgentHeader.jsx";
 import DropdownMenu from "../molecules/DropdownMenu.jsx";
 import SwitchAgentButton from "../molecules/SwitchAgentButton.jsx";
 import SwitchAgentModal from "./SwitchAgentModal.jsx";
+import ModelSelector from "../molecules/ModelSelector.jsx";
 
 const ChatAgentHeader = ({
                              agentName,
@@ -18,6 +19,9 @@ const ChatAgentHeader = ({
                              onClear,
                              agents,
                              activeAgentId: propActiveAgentId,
+                             models,
+                             selectedModelId,
+                             onModelChange,
                          }) => {
     // State to control modal
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,28 +47,59 @@ const ChatAgentHeader = ({
                     padding: { xs: "8px 10px", sm: "16px 20px" },
                     borderBottom: "1px solid #e5e7eb",
                     backgroundColor: "#ffffff",
+                    overflow: "hidden",
                 }}
             >
-                <Box display="flex" alignItems="center" gap={1.5} minWidth={0} flex={1}>
+                <Box 
+                    display="flex" 
+                    alignItems="center" 
+                    gap={1.5} 
+                    minWidth={0} 
+                    flex={1}
+                    sx={{
+                        overflow: "hidden",
+                    }}
+                >
                     <IconButton
                         onClick={onMenuClick}
-                        sx={{ display: { xs: "inline-flex", md: "none" } }}
+                        sx={{ 
+                            display: { xs: "inline-flex", md: "none" },
+                            flexShrink: 0,
+                        }}
                         aria-label="Open sidebar"
                     >
                         <MenuIcon />
                     </IconButton>
 
-                    <AgentHeader
-                        agentName={agentName}
-                        description={description}
-                        emoji={agentEmoji}
-                        iconBg={agentColor}
-                        onClick={handleOpenModal}
-                    />
+                    <Box sx={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
+                        <AgentHeader
+                            agentName={agentName}
+                            description={description}
+                            emoji={agentEmoji}
+                            iconBg={agentColor}
+                            onClick={handleOpenModal}
+                        />
+                    </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1.5} flexShrink={0}>
-                    <SwitchAgentButton onClick={handleOpenModal} />
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={{ xs: 0.5, sm: 1.5 }}
+                    flexShrink={0}
+                    sx={{
+                        marginLeft: { xs: 0.5, sm: 1 },
+                    }}
+                >
+                    <ModelSelector
+                        models={models}
+                        selectedModelId={selectedModelId}
+                        onModelChange={onModelChange}
+                    />
+                    <Box sx={{ display: { xs: "none", md: "block" } }}>
+                        <SwitchAgentButton onClick={handleOpenModal} />
+                    </Box>
+
                     <DropdownMenu onDownload={onDownload} onClear={onClear} />
                 </Box>
             </Box>

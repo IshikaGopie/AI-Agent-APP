@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import MessageBubble from "../atoms/MessageBubble";
 
-const ChatMessage = ({ text, isAgent, agentEmoji = "🤖", agentColor = "#3b82f6" }) => {
+const ChatMessage = ({ text, isAgent, agentEmoji, agentColor  }) => {
     return (
         <Box
             sx={{

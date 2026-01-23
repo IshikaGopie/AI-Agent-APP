@@ -16,6 +16,9 @@ const ChatLayout = ({
                         isLoadingResponse = false,
                         onClear,
                         onDownload,
+                        models = [],
+                        selectedModelId,
+                        onModelChange,
                     }) => {
     const resolvedAgent =
         activeAgent ||
@@ -41,6 +44,9 @@ const ChatLayout = ({
                     onDownload={onDownload}
                     agents={agents}
                     activeAgentId={resolvedAgent?.id}
+                    models={models}
+                    selectedModelId={selectedModelId}
+                    onModelChange={onModelChange}
                 />
 
                 <Box 
