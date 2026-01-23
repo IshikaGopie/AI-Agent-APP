@@ -4,6 +4,7 @@ const DefaultInput = ({
                           placeholder,
                           value,
                           onChange,
+                          onKeyDown,
                           startAdornment,
                           endAdornment,
                       }) => {
@@ -15,9 +16,12 @@ const DefaultInput = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            InputProps={{
-                startAdornment,
-                endAdornment,
+            onKeyDown={onKeyDown}
+            slotProps={{
+                input: {
+                    startAdornment,
+                    endAdornment,
+                },
             }}
             sx={{
                 "& .MuiOutlinedInput-root": {
