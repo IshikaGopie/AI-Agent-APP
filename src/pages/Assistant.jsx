@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../components/organisms /SideBar.jsx";
 import ChatLayout from "../components/templates/ChatLayout.jsx";
 import { aiAgentService } from '../plugins/01.services';
+import { useNotification } from '../contexts/NotificationContext';
 import {
     setAgents,
     setSessions,
@@ -28,6 +29,7 @@ const Assistant = () => {
     const isLoadingResponse = useSelector((state) => state.agent.isLoadingResponse);
 
     const dispatch = useDispatch();
+    const { showError } = useNotification();
 
     useEffect(() => {
         aiAgentService
@@ -37,8 +39,8 @@ const Assistant = () => {
                     dispatch(setAgents(data));
                 }
             })
-            .catch((err) => console.error("getAgents failed:", err));
-    }, [dispatch]);
+            .catch((err) => showError(err.message || 'Failed to load agents'));
+    }, [dispatch, showError]);
 
     const activeChat = useMemo(
         () => sessions.find((session) => session.id === activeChatId) || sessions[0],
@@ -64,8 +66,8 @@ const Assistant = () => {
                     dispatch(setSessions(data));
                 }
             })
-            .catch((err) => console.error("getConversations failed:", err));
-    }, [dispatch]);
+            .catch((err) => showError(err.message || 'Failed to load conversations'));
+    }, [dispatch, showError]);
 
     // create a new chat if no convos were found
     useEffect(() => {
@@ -97,9 +99,7 @@ const Assistant = () => {
                     );
                 }
             })
-            .catch((err) =>
-                console.error("getConversationMessages failed:", err),
-            );
+            .catch((err) => showError(err.message || 'Failed to load messages'));
     }, [activeChat?.id]);
 
     const handleSendMessage = async (text) => {
@@ -123,7 +123,8 @@ const Assistant = () => {
                     }));
                 }
             } catch (err) {
-                console.error("createConversation failed:", err);
+                showError(err.message || 'Failed to create conversation');
+                dispatch(setLoadingResponse(false));
                 return;
             }
         }
@@ -150,7 +151,7 @@ const Assistant = () => {
                 }
             }
         } catch (err) {
-            console.error("chat failed:", err);
+            showError(err.message || 'Failed to send message');
         } finally {
             // update loading state to hide loading bubble
             dispatch(setLoadingResponse(false));
@@ -161,7 +162,7 @@ const Assistant = () => {
             .then((conversation) => {
                 dispatch(updateSessionTitle({ sessionId: conversationId, title: conversation.title }));
             })
-            .catch((err) => console.error("getConversation failed:", err));
+            .catch((err) => showError(err.message || 'Failed to update conversation title'));
     };
 
     const handleNewChat = (agentId = activeAgent?.id) => {
@@ -185,7 +186,7 @@ const Assistant = () => {
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(url);
             })
-            .catch((err) => console.error("downloadConversation failed:", err));
+            .catch((err) => showError(err.message || 'Failed to download conversation'));
     };
 
 
@@ -204,9 +205,7 @@ const Assistant = () => {
                     );
                 }
             })
-            .catch((err) =>
-                console.error("getConversationMessages failed:", err),
-            );
+            .catch((err) => showError(err.message || 'Failed to load conversation messages'));
     };
 
     const handleSwitchAgent = (agentId) => {
@@ -216,7 +215,7 @@ const Assistant = () => {
     const deleteChat = (chatId) => {
         aiAgentService.deleteConversation(chatId).then(() => {
             dispatch(deleteSession(chatId));
-        }).catch((err) => console.error("deleteConversation failed:", err));
+        }).catch((err) => showError(err.message || 'Failed to delete conversation'));
     }
 
     const clearConversation = () => {
@@ -224,7 +223,7 @@ const Assistant = () => {
             .then(() => {
                 dispatch(clearConversationMessages(activeChat?.id));
             })
-            .catch((err) => console.error("clearConversation failed:", err));
+            .catch((err) => showError(err.message || 'Failed to clear conversation'));
     }
 
     return (
