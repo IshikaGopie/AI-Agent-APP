@@ -20,6 +20,8 @@ import {
     updateSessionTitle,
     setModels,
     setSelectedModel,
+    setPdfInfo,
+    removePdf,
 } from "../state/agent/agentSlice";
 
 const Assistant = () => {
@@ -116,6 +118,37 @@ const Assistant = () => {
             })
             .catch((err) => showError(err.message || 'Failed to load messages'));
     }, [activeChat?.id]);
+
+    // load PDF info for the active chat
+    useEffect(() => {
+        if (!activeChat?.id || activeChat.id?.startsWith('chat-')) {
+            return;
+        }
+
+        // fetch PDF info if hasPdf is true and pdfInfo is not already loaded
+        if (activeChat.hasPdf && !activeChat.pdfInfo) {
+            aiAgentService
+                .getPdf(activeChat.id)
+                .then((data) => {
+                    if (data && !data.error) {
+                        dispatch(
+                            setPdfInfo({
+                                sessionId: activeChat.id,
+                                pdfInfo: data,
+                            }),
+                        );
+                    }
+                })
+                .catch((err) => {
+                    if (err.message && !err.message.includes('404')) {
+                        console.error('Failed to load PDF info:', err);
+                    }
+                });
+        } else if (!activeChat.hasPdf && activeChat.pdfInfo) {
+            // clear PDF info if hasPdf is false and pdfInfo is already loaded
+            dispatch(removePdf(activeChat.id));
+        }
+    }, [activeChat?.id, activeChat?.hasPdf]);
 
     const handleSendMessage = async (text) => {
         if (!text?.trim() || !activeChat || !activeAgent) return;
@@ -251,6 +284,58 @@ const Assistant = () => {
         }
     };
 
+    const handleFileUpload = async (file) => {
+        if (!activeChat || !file) return;
+
+        // Check if this is a new chat that needs to be created
+        const isNewChat = activeChat.id?.startsWith('chat-') && !activeChat.isCleared;
+        let conversationId = activeChat.id;
+
+        // Create conversation on first upload if needed
+        if (isNewChat) {
+            try {
+                const conversation = await aiAgentService.createConversation(activeAgent.id);
+                if (conversation?.id) {
+                    conversationId = conversation.id;
+                    dispatch(updateSessionId({
+                        oldId: activeChat.id,
+                        newId: conversationId,
+                    }));
+                }
+            } catch (err) {
+                showError(err.message || 'Failed to create conversation');
+                return;
+            }
+        }
+
+        try {
+            const result = await aiAgentService.uploadPdf(conversationId, file);
+            if (result) {
+                // Fetch updated PDF info
+                const pdfInfo = await aiAgentService.getPdf(conversationId);
+                if (pdfInfo && !pdfInfo.error) {
+                    dispatch(setPdfInfo({
+                        sessionId: conversationId,
+                        pdfInfo: pdfInfo,
+                    }));
+                }
+            }
+        } catch (err) {
+            showError(err.message || 'Failed to upload PDF');
+        }
+    };
+
+    const handleDeletePdf = async () => {
+        if (!activeChat?.id || activeChat.id?.startsWith('chat-')) return;
+
+        try {
+            await aiAgentService.deletePdf(activeChat.id);
+            dispatch(removePdf(activeChat.id));
+        } catch (err) {
+            showError(err.message || 'Failed to delete PDF');
+        }
+    };
+
     return (
         <Box
             display="flex"
@@ -286,6 +371,9 @@ const Assistant = () => {
                     models={models}
                     selectedModelId={activeChat?.selectedModel || models[0]?.id || null}
                     onModelChange={handleModelChange}
+                    pdfInfo={activeChat?.pdfInfo}
+                    onDeletePdf={handleDeletePdf}
+                    onFileUpload={handleFileUpload}
                 />
             </Box>
         </Box>

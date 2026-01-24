@@ -1,5 +1,7 @@
 import ChatEmptyState from "./ChatEmptyState";
 import ChatMessagesList from "./ChatMessagesList";
+import PdfAttachment from "../molecules/PdfAttachment";
+import { Box } from "@mui/material";
 
 const ChatConversation = ({
                               messages = [],
@@ -9,6 +11,8 @@ const ChatConversation = ({
                               agentDescription,
                               agentExamples,
                               isLoadingResponse,
+                              pdfInfo,
+                              onDeletePdf,
                           }) => {
     if (!messages.length && !isLoadingResponse) {
         return (
@@ -24,6 +28,11 @@ const ChatConversation = ({
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+            {pdfInfo && (
+                <Box sx={{ padding: 3, paddingBottom: 0 }}>
+                    <PdfAttachment pdfInfo={pdfInfo} onDelete={onDeletePdf} />
+                </Box>
+            )}
             <ChatMessagesList
                 messages={messages}
                 agentEmoji={agentEmoji}

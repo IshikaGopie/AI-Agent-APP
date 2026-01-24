@@ -19,6 +19,9 @@ const ChatLayout = ({
                         models = [],
                         selectedModelId,
                         onModelChange,
+                        pdfInfo,
+                        onDeletePdf,
+                        onFileUpload,
                     }) => {
     const resolvedAgent =
         activeAgent ||
@@ -64,11 +67,14 @@ const ChatLayout = ({
                         agentDescription={resolvedAgent?.description}
                         agentExamples={resolvedAgent?.examples}
                         isLoadingResponse={isLoadingResponse}
+                        pdfInfo={pdfInfo}
+                        onDeletePdf={onDeletePdf}
                     />
                 </Box>
 
                 <ChatInput
                     onSend={onSendMessage}
+                    onFileUpload={onFileUpload}
                     placeholder={`Message ${resolvedAgent?.name || "Agent"}...`}
                 />
 
