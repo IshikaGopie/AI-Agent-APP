@@ -16,13 +16,20 @@ const ChatConversation = ({
                           }) => {
     if (!messages.length && !isLoadingResponse) {
         return (
-            <ChatEmptyState
-                agentEmoji={agentEmoji}
-                agentColor={agentColor}
-                agentName={agentName}
-                agentDescription={agentDescription}
-                agentExamples={agentExamples}
-            />
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+                {pdfInfo && (
+                    <Box sx={{ padding: 3, paddingBottom: 0 }}>
+                        <PdfAttachment pdfInfo={pdfInfo} onDelete={onDeletePdf} />
+                    </Box>
+                )}
+                <ChatEmptyState
+                    agentEmoji={agentEmoji}
+                    agentColor={agentColor}
+                    agentName={agentName}
+                    agentDescription={agentDescription}
+                    agentExamples={agentExamples}
+                />
+            </div>
         );
     }
 
