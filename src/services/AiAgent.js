@@ -90,4 +90,26 @@ export class AiAgentService {
             this.baseUrl + '/models',
         )
     }
+
+    async uploadPdf(conversationId, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        return this.apiRequest.post(
+            this.baseUrl + '/conversations/' + conversationId + '/upload-pdf',
+            formData
+        )
+    }
+
+    async getPdf(conversationId) {
+        return this.apiRequest.get(
+            this.baseUrl + '/conversations/' + conversationId + '/pdf'
+        )
+    }
+
+    async deletePdf(conversationId){
+        return this.apiRequest.delete(
+            this.baseUrl + '/conversations/' + conversationId + '/pdf'
+        )
+    }
 }

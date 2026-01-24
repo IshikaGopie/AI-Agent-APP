@@ -7,6 +7,8 @@ const createSession = (agent, selectedModel = null) => ({
     messages: [],
     timestamp: 'Just now',
     selectedModel: selectedModel,
+    hasPdf: false,
+    pdfInfo: null,
 });
 
 const initialState = {
@@ -57,6 +59,8 @@ const agentSlice = createSlice({
                 messages: [],
                 timestamp: conversation.createdAt,
                 selectedModel: conversation.selectedModel || null,
+                hasPdf: conversation.hasPdf || false,
+                pdfInfo: null, // Will be loaded separately
             }));
 
             state.activeChatId = state.sessions[0]?.id ?? null;
@@ -217,6 +221,22 @@ const agentSlice = createSlice({
                 session.selectedModel = modelId;
             }
         },
+        setPdfInfo: (state, action) => {
+            const { sessionId, pdfInfo } = action.payload;
+            const session = state.sessions.find((s) => s.id === sessionId);
+            if (session) {
+                session.pdfInfo = pdfInfo;
+                session.hasPdf = !!pdfInfo;
+            }
+        },
+        removePdf: (state, action) => {
+            const sessionId = action.payload;
+            const session = state.sessions.find((s) => s.id === sessionId);
+            if (session) {
+                session.pdfInfo = null;
+                session.hasPdf = false;
+            }
+        },
     },
 });
 
@@ -235,6 +255,8 @@ export const {
     updateSessionTitle,
     setModels,
     setSelectedModel,
+    setPdfInfo,
+    removePdf,
 } = agentSlice.actions;
 
 export default agentSlice.reducer;

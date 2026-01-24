@@ -27,8 +27,14 @@ export class ApiRequest {
 
     async post(url, data, contentType = 'application/json') {
         try {
+            const headers = {};
+
+            if (!(data instanceof FormData)) {
+                headers['Content-Type'] = contentType;
+            }
+            
             const response = await axios.post(url, data, {
-                headers: { 'Content-Type': contentType },
+                headers,
             });
             return response.data;
         } catch (error) {
