@@ -143,28 +143,3 @@ The app communicates with a backend API through the `AiAgentService` class. All 
 2. Add API methods to `AiAgentService` if backend integration is required
 3. Create or update components as needed
 4. Wire everything together in the `Assistant` page component
-
-## Building for Production
-
-```bash
-npm run build
-```
-
-The production build will be created in the `dist/` directory, ready to be deployed to any static hosting service.
-
-## Troubleshooting
-
-### API Connection Issues
-
-- Ensure the backend API is running on the correct port
-- Check the `VITE_AI_AGENT_SERVICE_ENDPOINT` environment variable
-- Verify the Vite proxy configuration in `vite.config.js`
-
-### Port Already in Use
-
-If port 5173 is already in use, Vite will automatically try the next available port. Check the terminal output for the actual port number.
-
-### Build Errors
-
-- Clear `node_modules` and reinstall: `rm -rf node_modules && npm install`
-- Clear Vite cache: `rm -rf node_modules/.vite`
