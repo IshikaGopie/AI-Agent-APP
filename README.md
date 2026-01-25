@@ -1,6 +1,6 @@
 # AI Agent App
 
-A modernAI chat application built with React and Vite. This application provides an interface for interacting with multiple AI agents, managing conversations, and selecting different AI models.
+A modernAI chat application built with React and Vite. This application provides an interface for interacting with multiple AI agents, managing conversations, and selecting different AI models. It uses an atomic design approach for component architecture and is fully responsive for both desktop and mobile devices.
 
 ## Features
 
@@ -79,13 +79,9 @@ Make sure your backend API is running on `http://localhost:8080`. The app expect
 - `DELETE /conversations/:id` - Delete a conversation
 - `DELETE /conversations/:id/clear` - Clear messages in a conversation
 - `GET /conversations/:id/download` - Download conversation as PDF
-
-## Available Scripts
-
-- `npm run dev` - Start the development server
-- `npm run build` - Build the application for production
-- `npm run preview` - Preview the production build locally
-- `npm run lint` - Run ESLint to check code quality
+- `POST /conversations/:id/upload-pdf` - Upload a PDF file to a conversation
+- `GET /conversations/:id/pdf` - Get uploaded PDF for a conversation
+- `DELETE /conversations/:id/pdf` - Delete uploaded PDF from a conversation
 
 ## Project Structure
 
