@@ -48,7 +48,7 @@ const DropdownMenu = ({ onDownload, onClear }) => {
                     <ListItemIcon>
                         <DownloadIcon fontSize="small" />
                     </ListItemIcon>
-                    <Typography fontSize={14}>Download PDF</Typography>
+                    <Typography fontSize={14}>Download Chat</Typography>
                 </MenuItem>
 
                 <MenuItem onClick={handleClear}>
