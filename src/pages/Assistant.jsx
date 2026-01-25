@@ -125,30 +125,31 @@ const Assistant = () => {
             return;
         }
 
-        // fetch PDF info if hasPdf is true and pdfInfo is not already loaded
-        if (activeChat.hasPdf && !activeChat.pdfInfo) {
-            aiAgentService
-                .getPdf(activeChat.id)
-                .then((data) => {
-                    if (data && !data.error) {
-                        dispatch(
-                            setPdfInfo({
-                                sessionId: activeChat.id,
-                                pdfInfo: data,
-                            }),
-                        );
-                    }
-                })
-                .catch((err) => {
-                    if (err.message && !err.message.includes('404')) {
-                        console.error('Failed to load PDF info:', err);
-                    }
-                });
-        } else if (!activeChat.hasPdf && activeChat.pdfInfo) {
-            // clear PDF info if hasPdf is false and pdfInfo is already loaded
-            dispatch(removePdf(activeChat.id));
+        // Skip if PDF info is already loaded
+        if (activeChat.pdfInfo) {
+            return;
         }
-    }, [activeChat?.id, activeChat?.hasPdf]);
+
+        // Fetch PDF info for the active chat
+        aiAgentService
+            .getPdf(activeChat.id)
+            .then((data) => {
+                if (data && !data.error) {
+                    dispatch(
+                        setPdfInfo({
+                            sessionId: activeChat.id,
+                            pdfInfo: data,
+                        }),
+                    );
+                }
+            })
+            .catch((err) => {
+                // Silently ignore 404 errors (no PDF for this conversation)
+                if (err.message && !err.message.includes('404')) {
+                    console.error('Failed to load PDF info:', err);
+                }
+            });
+    }, [activeChat?.id, dispatch]);
 
     const handleSendMessage = async (text) => {
         if (!text?.trim() || !activeChat || !activeAgent) return;
